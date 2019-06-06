@@ -1,0 +1,10 @@
+maravillapp/settings.py
+venv/
+apps/*/migrations/
+**/__pycache__/
+*.log
+*.pot
+*.pyc
+media
+.idea
+db.sqlite3

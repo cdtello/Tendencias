@@ -1,0 +1,118 @@
+{% extends 'base_tenant.html' %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+
+{% block titulo %}Carrito de Compras{% endblock titulo %}
+
+
+{% block contenido %}
+<section class="ftco-section ftco-cart">
+  <div class="container">
+    <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'usuarios:home' %}">Home</a></span> <span>Carrito de Compras</span></p>
+    <div class="row">
+      <div class="col-md-12 ftco-animate">
+        <div class="cart-list">
+          <table class="table">
+            <thead class="thead-primary">
+              <tr class="text-center">
+                <th>&nbsp;</th>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in orden.get_carrito_items %}
+              <tr class="text-center">
+                <td class="product-remove"><a href="{% url 'carrito:borrar_de_carrito' item.id %}"><span class="icon-close"></span></a></td>
+                {% if item.producto.imagen  %}
+                <td class="image-prod"><div class="img" style="background-image:url({{ item.producto.imagen.url }});"></div></td>
+                {% else %}
+                <td class="image-prod"><div class="img" style="background-image: url({% static 'imagenes (acomodar)/no_image.jpg' %});"></div></td>
+                {% endif %}
+
+                <td class="product-name">
+                  <h3>{{item.producto.nombre}}</h3>
+                  <p>{{item.producto.descripcion}}</p>
+                </td>
+
+                <td class="price" >$<label type="text" id="precio{{item.id}}">{{item.producto.precio}}</label></td>
+
+                <td class="quantity">
+                
+                  <div class="input-group mb-3">
+                    <input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100" id="cantidad{{item.id}}" onBlur="Pluss({{item.id}})">
+                  </div>
+                </td>
+
+
+                
+
+
+                <td class="total" >$<label type="text" id="resultado{{item.id}}">{{item.producto.precio}}</label></td>
+
+
+                <script type = "text/javascript">
+                function Pluss(foco)
+                {
+                  var anterior = document.getElementById('resultado'+foco).innerHTML
+                  var precio = document.getElementById('precio'+foco).innerHTML;
+                  var cantidad = document.getElementById('cantidad'+foco).value;
+                  var Resultado =  precio * cantidad;
+                  var nuevo = Resultado - anterior;
+
+                  var total = document.getElementById('subtotal').innerHTML * 1;
+                  var totalResul = total + nuevo;
+                  
+                  document.getElementById('resultado'+foco).innerHTML = Resultado;
+                  document.getElementById('subtotal').innerHTML = totalResul;
+                  document.getElementById('total').innerHTML = totalResul;                  
+                }
+                </script>
+
+              </tr><!-- END TR-->
+              {% empty %}
+              <tr>
+                <td colspan= 3> No hay ningún producto en el carrito.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <div class="col col-lg-3 col-md-6 mt-5 cart-wrap ftco-animate">
+        <div class="cart-total mb-3">
+          <h3>Facturación</h3>
+          <p class="d-flex">
+            <span>Subtotal</span>
+            <span >
+              <td class="total" >$<label type="text" id="subtotal">{{total}}</label></td>
+            </span>
+          </p>
+          <p class="d-flex">
+            <span>Domicilio</span>
+            <span>$0.00</span>
+          </p>
+          <p class="d-flex">
+            <span>Descuentos</span>
+            <span>$0.00</span>
+          </p>
+          <hr>
+          <p class="d-flex total-price">
+            <span>Total</span>
+            <span class="total">$<label type="text" id="total">{{total}}</label></span>
+          </p>
+        </div>
+        <p class="text-center"><a href="{% url 'carrito:checkout' %}" class="btn btn-primary py-3 px-4">Pagar</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock contenido %}
+{% block js %}
+
+{% endblock js %}

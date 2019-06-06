@@ -1,0 +1,72 @@
+{% extends 'base_dash.html' %}
+{# Load the tag library #}
+{% load static %}
+{% load staticfiles %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'dist/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'coffee_template/css/producto-listar.css' %}">
+
+{% endblock css %}
+
+{% block titulo %}Ingredientes del Producto{% endblock titulo %}
+
+{% block contenido %}
+
+    <section class="ftco-section center">
+        <div class="container">
+            <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'usuarios:home' %}">Home</a></span> <span>Lista de Ingredientes</span></p>
+            <form action="#" class="billing-form ftco-bg-dark p-3 p-md-5">
+                <div class="row justify-content-center">
+                    <div class="col-xl-10 ftco-animate">
+                        <h3 class="mb-4 billing-heading">Lista de Ingredientes del Producto {{nombre_producto}} </h3>
+                    </div>
+                    <div class="col-xl-2 ftco-animate" >
+                        <p><a href="{% url 'productos:intento_crear' pk %}" style="width: 145px;" class="btn btn-primary p-2">Agregar producto</a></p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="example" class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th style="width: 25%">Nombre</th>
+                            <th style="width: 25%">Producto</th>
+                            <th style="width: 25%">Cantidad</th>
+                            <th style="width: 25%">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for combos in comboproductos_list %}
+                            <tr>
+
+                                <td  style="width: 25%">{{combos.combo.nombre}}</td>
+                                <td  style="width: 25%">{{combos.producto.nombre}}</td>
+                                <td  style="width: 25%">{{combos.cantidad_productos}}</td>
+                                <td style="width: 25%">
+                                    <div class="container">
+                                        <p><a href="{% url 'productos:ingrediente_producto_detalle' combos.id %}" class="btn btn-outline-info custom-btn">Ver Detalle</a></p>
+                                        <p><a href="{% url 'productos:ingrediente_producto_actualizar' combos.id %}" class="btn btn-outline-warning custom-btn">Modificar</a></p>
+                                        <p><a href="{% url 'productos:ingrediente_producto_eliminar' combos.id %}" class="btn btn-outline-danger custom-btn">Eliminar</a></p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock contenido %}
+
+{% block js %}
+    <script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery-3.3.1.js' %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'dist/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        } );
+    </script>
+
+{% endblock js %}
